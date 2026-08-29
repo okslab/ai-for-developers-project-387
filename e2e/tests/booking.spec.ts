@@ -1,4 +1,21 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type APIRequestContext, type Page } from "@playwright/test";
+
+const API_HOST = process.env.E2E_API_HOST ?? "127.0.0.1";
+const API_PORT = Number(process.env.E2E_API_PORT ?? 8000);
+const API_URL = `http://${API_HOST}:${API_PORT}`;
+
+async function createEventTypeViaApi(
+  request: APIRequestContext,
+  name: string,
+  durationMinutes: number,
+): Promise<string> {
+  const res = await request.post(`${API_URL}/owner/event-types`, {
+    data: { name, description: "Concurrent booking test.", durationMinutes },
+  });
+  expect(res.status()).toBe(201);
+  const body = (await res.json()) as { id: string };
+  return body.id;
+}
 
 async function createEventType(
   page: Page,
@@ -98,4 +115,40 @@ test("S4: booking the same slot twice surfaces a conflict (409)", async ({ page 
   } finally {
     await secondPage.close();
   }
+});
+
+// Fires two simultaneous bookings for the same slot against the real backend.
+// Both requests can pass the free check before either inserts, so the single
+// process must serialize them with its lock (storage.py) — exactly one 201 and
+// one 409. This is the automated regression test for the race-condition issue:
+// with multiple workers/replicas both would return 201 and double-book.
+test("S5: simultaneous bookings for the same slot yield one 201 and one 409", async ({ request }) => {
+  const eventTypeId = await createEventTypeViaApi(request, "Race slot", 30);
+
+  const slotsRes = await request.get(`${API_URL}/event-types/${eventTypeId}/slots`);
+  expect(slotsRes.ok()).toBeTruthy();
+  const slots = (await slotsRes.json()) as Array<{ startsAt: string }>;
+  expect(slots.length).toBeGreaterThan(0);
+  const target = slots[slots.length - 1].startsAt;
+
+  const [a, b] = await Promise.all([
+    request.post(`${API_URL}/bookings`, {
+      data: {
+        eventTypeId,
+        startsAt: target,
+        guestName: "Alice",
+        guestEmail: "alice@example.com",
+      },
+    }),
+    request.post(`${API_URL}/bookings`, {
+      data: {
+        eventTypeId,
+        startsAt: target,
+        guestName: "Bob",
+        guestEmail: "bob@example.com",
+      },
+    }),
+  ]);
+
+  expect([a.status(), b.status()].sort()).toEqual([201, 409]);
 });
