@@ -1,39 +1,10 @@
-# Календарь звонков (продолжение)
+### Hexlet tests and linter status:
+[![Actions Status](https://github.com/okslab/ai-for-developers-project-386/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/okslab/ai-for-developers-project-386/actions)
 
+## Deployed application
 
-[![hexlet-check](https://github.com/okslab/ai-for-developers-project-387/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/okslab/ai-for-developers-project-387/actions)
+Public link: https://ai-for-developers-project-386-production-483e.up.railway.app
 
-Интегрируйте работу агентов в GitHub проект
-
-Учебный проект Хекслета: https://ru.hexlet.io/programs/ai-for-developers
-Как это должно работать: https://files.hexlet.app/a/2ipc5m
-
-## Стек
-
-- Разное
-
-## Установка
-
-<!-- Опишите установку: клонирование, зависимости, переменные окружения -->
-
-```bash
-git clone https://github.com/okslab/ai-for-developers-project-387.git
-cd ai-for-developers-project-387
-```
-
-## Использование
-
-<!-- Добавьте примеры запуска и запись asciinema — именно это смотрит работодатель -->
-
----
-
-<details>
-<summary>Автоматические тесты Хекслета</summary>
-
-Тесты запускаются на каждый коммит. За запуск отвечает файл `.github/workflows/hexlet-check.yml` — не удаляйте и не переименовывайте ни его, ни репозиторий.
-
-</details>
-
-## О Хекслете
-
-[Хекслет](https://ru.hexlet.io/) — школа программирования: авторские программы обучения с практикой, поддержкой наставников и реальными проектами, которые остаются в резюме. Этот репозиторий — один из таких проектов.
+The app runs in a single Docker container (see `Dockerfile`) that serves the React SPA
+and the FastAPI backend on the port from the `PORT` environment variable. Deployed on
+Railway.
