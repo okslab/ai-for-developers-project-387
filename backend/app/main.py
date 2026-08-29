@@ -1,8 +1,27 @@
+import os
+
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from .routers import guest, owner
+
+# The store is in-memory and its occupancy rule is enforced by an in-process
+# lock, so correctness requires exactly one process. Fail fast on any
+# env-driven worker count (belt-and-braces to the `--workers 1` pinned at every
+# launch point) so a misconfiguration can't silently allow double-booking.
+def _guard_single_process() -> None:
+    for var in ("WEB_CONCURRENCY", "GUNICORN_WORKERS"):
+        value = os.environ.get(var)
+        if value is not None and value != "1":
+            raise RuntimeError(
+                f"{var}={value!r}: the backend must run as a single process; "
+                "the in-memory store is per-process and multiple workers/replicas "
+                "would allow double-booking. Set it to 1 or unset it."
+            )
+
+
+_guard_single_process()
 
 app = FastAPI(title="Appointment Booking API", version="1.0.0")
 

@@ -54,6 +54,18 @@ TypeSpec. The contract is the single source of truth for both parts.
 - `.github/workflows/e2e.yml` runs them on every push/PR against a freshly started
   backend + frontend.
 
+## Deployment constraint — single-process backend
+
+- The backend uses an **in-memory** store; the occupancy rule is enforced by an
+  in-process lock (`backend/app/storage.py`). That guarantee is per-process only.
+- The backend **must run with exactly one uvicorn worker** (`--workers 1`) and
+  **must not be scaled to multiple replicas** (e.g. `railway scale` / dashboard
+  replica count). Multiple workers/replicas each hold their own store and lock,
+  so the same slot can be double-booked. Horizontal scaling is unsupported.
+- Every launch point pins `--workers 1`; startup guards in
+  `deploy/entrypoint.sh` and `backend/app/main.py` refuse to boot if
+  `WEB_CONCURRENCY`/`GUNICORN_WORKERS` is set to anything but `1`.
+
 ## Commits & releases
 
 - **Every commit, including agent-authored ones, MUST follow Conventional Commits:**
