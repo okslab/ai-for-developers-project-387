@@ -67,7 +67,7 @@ guest.
 Steps:
 
 1. The test creates an event type and fetches its free slots via the API.
-2. Two `POST /bookings` requests for the *same* slot are fired simultaneously
+2. Two `POST /api/bookings` requests for the *same* slot are fired simultaneously
    (via `Promise.all`) against the real backend.
 3. Both requests can pass the free-check before either inserts, so the single
    process must serialize them with its in-memory lock.
@@ -81,11 +81,11 @@ own store) both requests would return `201`.
 
 | Scenario | FR covered | API endpoints exercised via the UI |
 |---|---|---|
-| S1 | FR-1 | `POST /owner/event-types`, `GET /owner/event-types` |
-| S2 | FR-3, FR-4, FR-5 | `GET /event-types`, `GET /event-types/{id}`, `GET /event-types/{id}/slots`, `POST /bookings` |
-| S3 | FR-2 | `GET /owner/bookings` |
-| S4 | FR-6 | `POST /bookings` → `409` |
-| S5 | FR-6 | `POST /owner/event-types`, `GET /event-types/{id}/slots`, `POST /bookings` → `201` + `409` |
+| S1 | FR-1 | `POST /api/owner/event-types`, `GET /api/owner/event-types` |
+| S2 | FR-3, FR-4, FR-5 | `GET /api/event-types`, `GET /api/event-types/{id}`, `GET /api/event-types/{id}/slots`, `POST /api/bookings` |
+| S3 | FR-2 | `GET /api/owner/bookings` |
+| S4 | FR-6 | `POST /api/bookings` → `409` |
+| S5 | FR-6 | `POST /api/owner/event-types`, `GET /api/event-types/{id}/slots`, `POST /api/bookings` → `201` + `409` |
 
 ## Running locally
 

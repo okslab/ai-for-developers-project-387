@@ -9,7 +9,7 @@ async function createEventTypeViaApi(
   name: string,
   durationMinutes: number,
 ): Promise<string> {
-  const res = await request.post(`${API_URL}/owner/event-types`, {
+  const res = await request.post(`${API_URL}/api/owner/event-types`, {
     data: { name, description: "Concurrent booking test.", durationMinutes },
   });
   expect(res.status()).toBe(201);
@@ -125,14 +125,14 @@ test("S4: booking the same slot twice surfaces a conflict (409)", async ({ page 
 test("S5: simultaneous bookings for the same slot yield one 201 and one 409", async ({ request }) => {
   const eventTypeId = await createEventTypeViaApi(request, "Race slot", 30);
 
-  const slotsRes = await request.get(`${API_URL}/event-types/${eventTypeId}/slots`);
+  const slotsRes = await request.get(`${API_URL}/api/event-types/${eventTypeId}/slots`);
   expect(slotsRes.ok()).toBeTruthy();
   const slots = (await slotsRes.json()) as Array<{ startsAt: string }>;
   expect(slots.length).toBeGreaterThan(0);
   const target = slots[slots.length - 1].startsAt;
 
   const [a, b] = await Promise.all([
-    request.post(`${API_URL}/bookings`, {
+    request.post(`${API_URL}/api/bookings`, {
       data: {
         eventTypeId,
         startsAt: target,
@@ -140,7 +140,7 @@ test("S5: simultaneous bookings for the same slot yield one 201 and one 409", as
         guestEmail: "alice@example.com",
       },
     }),
-    request.post(`${API_URL}/bookings`, {
+    request.post(`${API_URL}/api/bookings`, {
       data: {
         eventTypeId,
         startsAt: target,
