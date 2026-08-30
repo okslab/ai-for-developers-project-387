@@ -42,7 +42,18 @@ const rows = entries
   )
   .join("\n");
 
-const html = `<!doctype html>
+const latestRows = entries
+  .map(
+    (e) => `    <li>
+      <a href="${e.fileName}">${e.url}</a>
+      ${Object.entries(e.summary)
+        .map(([k, v]) => `<span class="score">${k}: ${Math.round((v ?? 0) * 100)}</span>`)
+        .join("")}
+    </li>`
+  )
+  .join("\n");
+
+const buildHtml = (rows, extra) => `<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -57,6 +68,7 @@ const html = `<!doctype html>
 <body>
   <h1>Lighthouse reports</h1>
   <p>Latest run from <code>lighthouse</code> workflow.</p>
+  ${extra}
   <ul>
 ${rows}
   </ul>
@@ -64,5 +76,6 @@ ${rows}
 </html>
 `;
 
-await writeFile(join(outDir, "index.html"), html);
+await writeFile(join(outDir, "index.html"), buildHtml(rows));
+await writeFile(join(latestDir, "index.html"), buildHtml(latestRows));
 console.log(`Prepared ${entries.length} report(s) in ${latestDir} and index.html`);
