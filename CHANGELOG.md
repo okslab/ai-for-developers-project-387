@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/okslab/ai-for-developers-project-387/compare/v1.3.0...v1.3.1) (2026-08-30)
+
+
+### Bug Fixes
+
+* add index.html to lighthouse/latest in Pages site ([#16](https://github.com/okslab/ai-for-developers-project-387/issues/16)) ([bea608d](https://github.com/okslab/ai-for-developers-project-387/commit/bea608d3410332574e5fbba867db05bdfa6f13ab))
+
 ## [1.3.0](https://github.com/okslab/ai-for-developers-project-387/compare/v1.2.0...v1.3.0) (2026-08-30)
 
 
