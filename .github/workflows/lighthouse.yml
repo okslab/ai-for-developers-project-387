@@ -7,6 +7,8 @@ on:
 
 permissions:
   contents: read
+  pages: write
+  id-token: write
 
 jobs:
   lighthouse:
@@ -45,3 +47,19 @@ jobs:
           RAILWAY_S3_SECRET_ACCESS_KEY: ${{ secrets.RAILWAY_S3_SECRET_ACCESS_KEY }}
           RAILWAY_S3_BUCKET: ${{ secrets.RAILWAY_S3_BUCKET }}
         run: npm run upload:s3
+
+      - name: Prepare GitHub Pages site
+        working-directory: lighthouse
+        run: npm run pages:prepare
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: lighthouse/_site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -7,3 +7,4 @@ dist/
 build/
 lighthouse/.lighthouseci/
 lighthouse/reports/
+lighthouse/_site/
