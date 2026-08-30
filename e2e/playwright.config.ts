@@ -24,7 +24,7 @@ export default defineConfig({
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: [
     {
-      command: `${process.env.E2E_PYTHON ?? "python3"} -m uvicorn app.main:app --host ${API_HOST} --port ${API_PORT}`,
+      command: `${process.env.E2E_PYTHON ?? "python3"} -m uvicorn app.main:app --host ${API_HOST} --port ${API_PORT} --workers 1`,
       url: `${API_URL}/openapi.json`,
       cwd: "../backend",
       reuseExistingServer: !process.env.CI,
