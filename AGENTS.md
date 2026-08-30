@@ -65,6 +65,11 @@ TypeSpec. The contract is the single source of truth for both parts.
 - Every launch point pins `--workers 1`; startup guards in
   `deploy/entrypoint.sh` and `backend/app/main.py` refuse to boot if
   `WEB_CONCURRENCY`/`GUNICORN_WORKERS` is set to anything but `1`.
+- **Future alternative:** this constraint is a consequence of the in-memory
+  store. Switching reservations to a shared database (with row-level locking or
+  unique constraints on slot time ranges) is planned as a follow-up feature and
+  would lift the single-process restriction, allowing the backend to scale
+  horizontally.
 
 ## Commits & releases
 

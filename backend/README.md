@@ -35,6 +35,12 @@ same slot be double-booked. This is enforced at startup: `deploy/entrypoint.sh`
 and `app/main.py` refuse to boot if `WEB_CONCURRENCY`/`GUNICORN_WORKERS` is set
 to anything but `1`.
 
+**Future alternative:** storing reservations in a shared database instead of
+memory is planned as a follow-up feature. A database with row-level locking or
+unique constraints on slot time ranges would make the occupancy rule safe across
+processes and replicas, lifting the single-process restriction and allowing the
+backend to scale horizontally.
+
 ## Endpoints
 
 | Method | Path | Notes |

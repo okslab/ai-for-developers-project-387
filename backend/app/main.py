@@ -10,7 +10,7 @@ from .routers import guest, owner
 # lock, so correctness requires exactly one process. Fail fast on any
 # env-driven worker count (belt-and-braces to the `--workers 1` pinned at every
 # launch point) so a misconfiguration can't silently allow double-booking.
-def _guard_single_process() -> None:
+def _single_process_check() -> None:
     for var in ("WEB_CONCURRENCY", "GUNICORN_WORKERS"):
         value = os.environ.get(var)
         if value is not None and value != "1":
@@ -21,7 +21,7 @@ def _guard_single_process() -> None:
             )
 
 
-_guard_single_process()
+_single_process_check()
 
 app = FastAPI(title="Appointment Booking API", version="1.0.0")
 
