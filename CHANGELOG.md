@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.0](https://github.com/okslab/ai-for-developers-project-387/compare/v1.0.0...v1.1.0) (2026-08-30)
+
+
+### Features
+
+* add scheduled Lighthouse CI reports uploaded to Railway S3 ([485a82f](https://github.com/okslab/ai-for-developers-project-387/commit/485a82f6d7e214b2442ca2b089dae9e6ab0e45fd))
+* add scheduled Lighthouse CI reports uploaded to Railway S3 ([e6cf896](https://github.com/okslab/ai-for-developers-project-387/commit/e6cf896740aa889c98c03b12fed0839ea19173db))
+
 ## 1.0.0 (2026-08-30)
 
 
