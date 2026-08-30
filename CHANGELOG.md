@@ -6,7 +6,6 @@
 ### Features
 
 * publish latest Lighthouse report to GitHub Pages and archive by date in S3 ([6dfa0d0](https://github.com/okslab/ai-for-developers-project-387/commit/6dfa0d0cacb5fc83314dc5ab5ca994373d814fd9))
-* publish latest Lighthouse report to GitHub Pages and archive by date in S3 ([33424b1](https://github.com/okslab/ai-for-developers-project-387/commit/33424b189b1b966f9cba0cf496b19ae869bd7fbf))
 
 ## [1.1.0](https://github.com/okslab/ai-for-developers-project-387/compare/v1.0.0...v1.1.0) (2026-08-30)
 
