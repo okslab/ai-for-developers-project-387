@@ -17,12 +17,12 @@ def _error(status_code: int, code: str, message: str):
     )
 
 
-@router.get("/event-types", response_model=list[EventType])
+@router.get("/api/event-types", response_model=list[EventType])
 def list_event_types(store: Store = Depends(get_store)):
     return store.list_event_types()
 
 
-@router.get("/event-types/{event_type_id}", response_model=EventType)
+@router.get("/api/event-types/{event_type_id}", response_model=EventType)
 def get_event_type(event_type_id: str, store: Store = Depends(get_store)):
     event_type = store.get_event_type(event_type_id)
     if event_type is None:
@@ -30,7 +30,7 @@ def get_event_type(event_type_id: str, store: Store = Depends(get_store)):
     return event_type
 
 
-@router.get("/event-types/{event_type_id}/slots", response_model=list[Slot])
+@router.get("/api/event-types/{event_type_id}/slots", response_model=list[Slot])
 def list_slots(
     event_type_id: str,
     from_: datetime | None = None,
@@ -52,7 +52,7 @@ def list_slots(
     return store.list_slots(event_type, from_dt, to_dt)
 
 
-@router.post("/bookings", status_code=201, response_model=Booking)
+@router.post("/api/bookings", status_code=201, response_model=Booking)
 def create_booking(body: BookingCreate, store: Store = Depends(get_store)):
     result = store.create_booking(body)
     if result is None:

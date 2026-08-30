@@ -111,22 +111,22 @@ Behaviour below follows `spec.md`; wire formats follow `contract/openapi/openapi
 
 #### `/` — Booking-kinds page (spec FR-3)
 
-- Load `EventTypes_list` (`GET /event-types`).
+- Load `EventTypes_list` (`GET /api/event-types`).
 - For each event type show: `name`, `description`, `durationMinutes`.
 - Each card links to `/event-types/{id}` (its slots calendar).
 - Empty state when the list is empty; loading and error states.
 
 #### `/event-types/:eventTypeId` — Slots calendar + booking form (spec FR-4, FR-5)
 
-- Load the event type via `EventTypes_get` (`GET /event-types/{eventTypeId}`); on
+- Load the event type via `EventTypes_get` (`GET /api/event-types/{eventTypeId}`); on
   `NOT_FOUND` show “Event type not found”.
-- Load free slots via `Guest_listSlots` (`GET /event-types/{eventTypeId}/slots`) for the
+- Load free slots via `Guest_listSlots` (`GET /api/event-types/{eventTypeId}/slots`) for the
   14-day booking window (omit `from`/`to` so the server uses its defaults).
 - Render the returned `Slot[]` grouped by day and time (the server decides availability and
   30-minute grid semantics — the frontend only displays the slots).
 - Selecting a slot reveals a booking form: **guest name** and **guest email** (required,
   email format validated). Submitting calls `Bookings_create`
-  (`POST /bookings` with `eventTypeId`, `startsAt`, `guestName`, `guestEmail`).
+  (`POST /api/bookings` with `eventTypeId`, `startsAt`, `guestName`, `guestEmail`).
   - `201` → confirmation view with the created booking details (times, guest, event type).
   - `409` (`code: "CONFLICT"`) → “This time has just been taken — please pick another
     slot”, then refresh the slot list.
@@ -140,14 +140,14 @@ Behaviour below follows `spec.md`; wire formats follow `contract/openapi/openapi
 
 #### `/owner` — Event types admin (spec FR-1)
 
-- List event types via `OwnerEventTypes_list` (`GET /owner/event-types`).
+- List event types via `OwnerEventTypes_list` (`GET /api/owner/event-types`).
 - Create form: `name`, `description`, `durationMinutes` (positive integer). Submit calls
-  `OwnerEventTypes_create` (`POST /owner/event-types`). After success, refresh the list
+  `OwnerEventTypes_create` (`POST /api/owner/event-types`). After success, refresh the list
   and clear the form. Surface API errors (e.g. `422`) to the user.
 
 #### `/owner/bookings` — Upcoming meetings (spec FR-2)
 
-- Load `Owner_listUpcoming` (`GET /owner/bookings`). The server already returns only
+- Load `Owner_listUpcoming` (`GET /api/owner/bookings`). The server already returns only
   bookings with `endsAt >= now`, enriched with `eventTypeName` / `eventTypeDescription`.
 - Display each meeting: event type name (+ description), start/end times, guest name and
   email. Empty state when there are no upcoming meetings.

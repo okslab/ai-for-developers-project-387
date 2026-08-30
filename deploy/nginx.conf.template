@@ -23,19 +23,7 @@ server {
     location = /docs/oauth2-redirect {
         proxy_pass http://127.0.0.1:8080;
     }
-    location = /bookings {
-        proxy_pass http://127.0.0.1:8080;
-    }
-    location = /event-types {
-        proxy_pass http://127.0.0.1:8080;
-    }
-    location ~ ^/event-types/[^/]+/slots$ {
-        proxy_pass http://127.0.0.1:8080;
-    }
-    location ~ ^/owner/event-types/?$ {
-        proxy_pass http://127.0.0.1:8080;
-    }
-    location ~ ^/owner/bookings/?$ {
+    location /api/ {
         proxy_pass http://127.0.0.1:8080;
     }
 
