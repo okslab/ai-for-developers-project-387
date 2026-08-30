@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/okslab/ai-for-developers-project-387/compare/v1.1.0...v1.2.0) (2026-08-30)
+
+
+### Features
+
+* publish latest Lighthouse report to GitHub Pages and archive by date in S3 ([6dfa0d0](https://github.com/okslab/ai-for-developers-project-387/commit/6dfa0d0cacb5fc83314dc5ab5ca994373d814fd9))
+
 ## [1.1.0](https://github.com/okslab/ai-for-developers-project-387/compare/v1.0.0...v1.1.0) (2026-08-30)
 
 
