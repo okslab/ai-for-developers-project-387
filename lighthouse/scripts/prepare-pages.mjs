@@ -53,7 +53,7 @@ const latestRows = entries
   )
   .join("\n");
 
-const buildHtml = (rows, extra) => `<!doctype html>
+const buildHtml = (rows) => `<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -68,7 +68,6 @@ const buildHtml = (rows, extra) => `<!doctype html>
 <body>
   <h1>Lighthouse reports</h1>
   <p>Latest run from <code>lighthouse</code> workflow.</p>
-  ${extra}
   <ul>
 ${rows}
   </ul>
