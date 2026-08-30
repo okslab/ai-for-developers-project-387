@@ -14,6 +14,8 @@ for (const required of ["RAILWAY_S3_ENDPOINT", "RAILWAY_S3_ACCESS_KEY_ID", "RAIL
   }
 }
 
+const date = new Date().toISOString().slice(0, 10);
+
 const client = new S3Client({
   endpoint,
   region: "auto",
@@ -28,15 +30,18 @@ if (files.length === 0) {
 
 for (const file of files) {
   const body = await readFile(join(reportsDir, file));
-  await client.send(
-    new PutObjectCommand({
-      Bucket: bucket,
-      Key: `lighthouse/${file}`,
-      Body: body,
-      ContentType: "text/html; charset=utf-8",
-    })
-  );
-  console.log(`Uploaded lighthouse/${file}`);
+  const keys = [`lighthouse/${date}/${file}`, `lighthouse/latest/${file}`];
+  for (const key of keys) {
+    await client.send(
+      new PutObjectCommand({
+        Bucket: bucket,
+        Key: key,
+        Body: body,
+        ContentType: "text/html; charset=utf-8",
+      })
+    );
+    console.log(`Uploaded ${key}`);
+  }
 }
 
-console.log(`Uploaded ${files.length} HTML report(s) to s3://${bucket}/lighthouse/`);
+console.log(`Uploaded ${files.length} HTML report(s) to s3://${bucket}/lighthouse/${date}/ and lighthouse/latest/`);
