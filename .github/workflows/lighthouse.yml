@@ -1,0 +1,47 @@
+name: lighthouse
+
+on:
+  schedule:
+    - cron: '0 5 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: lighthouse/package-lock.json
+
+      - name: Install Lighthouse CI
+        working-directory: lighthouse
+        run: npm ci
+
+      - name: Run Lighthouse audits
+        working-directory: lighthouse
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
+        run: npm run collect
+
+      - name: Export HTML reports
+        working-directory: lighthouse
+        run: npm run upload:files
+
+      - name: Upload reports to Railway S3
+        working-directory: lighthouse
+        env:
+          RAILWAY_S3_ENDPOINT: ${{ secrets.RAILWAY_S3_ENDPOINT }}
+          RAILWAY_S3_ACCESS_KEY_ID: ${{ secrets.RAILWAY_S3_ACCESS_KEY_ID }}
+          RAILWAY_S3_SECRET_ACCESS_KEY: ${{ secrets.RAILWAY_S3_SECRET_ACCESS_KEY }}
+          RAILWAY_S3_BUCKET: ${{ secrets.RAILWAY_S3_BUCKET }}
+        run: npm run upload:s3
