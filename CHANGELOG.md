@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.2](https://github.com/okslab/ai-for-developers-project-387/compare/v1.3.1...v1.3.2) (2026-08-30)
+
+
+### Bug Fixes
+
+* remove undefined placeholder from Pages index template ([#18](https://github.com/okslab/ai-for-developers-project-387/issues/18)) ([33e4436](https://github.com/okslab/ai-for-developers-project-387/commit/33e4436772c6093c4bed84d80f6e911a05715a40))
+
 ## [1.3.1](https://github.com/okslab/ai-for-developers-project-387/compare/v1.3.0...v1.3.1) (2026-08-30)
 
 
