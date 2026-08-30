@@ -14,7 +14,36 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: googleapis/release-please-action@v4
+        id: release
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-type: simple
           target-branch: main
+
+      - name: Check out released tag
+        if: ${{ steps.release.outputs.release_created }}
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ steps.release.outputs.tag_name }}
+
+      - name: Install Railway CLI
+        if: ${{ steps.release.outputs.release_created }}
+        run: |
+          curl -fsSL railway.com/install.sh | bash
+          echo "$HOME/.railway/bin" >> "$GITHUB_PATH"
+
+      - name: Deploy to Railway
+        if: ${{ steps.release.outputs.release_created }}
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          railway up --ci -y \
+            -p c4a2671e-3ddf-4c87-8edb-6fbf2d44abe8 \
+            -s ad5afc1f-d213-4c59-b63d-c942cd3d7b27 \
+            -e production
+
+      - name: Verify deployment
+        if: ${{ steps.release.outputs.release_created }}
+        run: |
+          curl -fsS --retry 5 --retry-delay 10 \
+            https://ai-for-developers-project-387-production-79d9.up.railway.app/ -o /dev/null
