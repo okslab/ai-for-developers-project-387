@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.4](https://github.com/okslab/ai-for-developers-project-387/compare/v1.3.3...v1.3.4) (2026-09-02)
+
+
+### Bug Fixes
+
+* temporary change in cron schedule for lighthouse ([7164a0b](https://github.com/okslab/ai-for-developers-project-387/commit/7164a0b906b7605169f0f48285c2989001742a62))
+
 ## [1.3.3](https://github.com/okslab/ai-for-developers-project-387/compare/v1.3.2...v1.3.3) (2026-08-31)
 
 
